@@ -126,6 +126,11 @@ Module.register("MMM-Todoist", {
 		this.title = "Loading...";
 		this.loaded = false;
 
+		// Modal state tracking for deferred DOM updates
+		this.isModalOpen = false;
+		this.pendingTasksData = null;
+		this.hasPendingUpdate = false;
+
 		if (this.config.accessToken === "") {
 			Log.error("MMM-Todoist: AccessToken not set!");
 			return;
@@ -246,6 +251,16 @@ Module.register("MMM-Todoist", {
 	// ******** Data sent from the Backend helper. This is the data from the Todoist API ************
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === "TASKS") {
+			// If modal is open, store data for later and skip DOM update
+			if (this.isModalOpen) {
+				this.pendingTasksData = payload;
+				this.hasPendingUpdate = true;
+				if (this.config.debug) {
+					Log.log("MMM-Todoist: Modal open, deferring DOM update");
+				}
+				return;
+			}
+
 			this.filterTodoistData(payload);
 
 			if (this.config.displayLastUpdate) {
@@ -854,6 +869,9 @@ Module.register("MMM-Todoist", {
 	handleTaskClick: function(event, item) {
 		event.stopPropagation();
 
+		// Mark modal as open to prevent DOM updates
+		this.isModalOpen = true;
+
 		// Store current task for completion
 		this.currentTaskId = item.id;
 		this.currentTaskItem = item;
@@ -947,6 +965,28 @@ Module.register("MMM-Todoist", {
 		}
 		this.currentTaskId = null;
 		this.currentTaskItem = null;
+
+		// Mark modal as closed
+		this.isModalOpen = false;
+
+		// Apply any pending updates that were deferred while modal was open
+		if (this.hasPendingUpdate && this.pendingTasksData) {
+			if (this.config.debug) {
+				Log.log("MMM-Todoist: Modal closed, applying pending update");
+			}
+			this.filterTodoistData(this.pendingTasksData);
+
+			if (this.config.displayLastUpdate) {
+				this.lastUpdate = Date.now() / 1000;
+			}
+
+			this.loaded = true;
+			this.updateDom(1000);
+
+			// Clear pending data
+			this.pendingTasksData = null;
+			this.hasPendingUpdate = false;
+		}
 	},
 
 	/**
