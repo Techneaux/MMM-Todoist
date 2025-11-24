@@ -709,7 +709,7 @@ Module.register("MMM-Todoist", {
 				}
 				var h = d.getHours();
 				var m = z(d.getMinutes());
-				if (config.timeFormat == 12) {
+				if (config.timeFormat === 12) {
 					return " " + (h % 12 || 12) + ":" + m + (h < 12 ? " AM" : " PM");
 				} else {
 					return " " + h + ":" + m;
@@ -875,7 +875,7 @@ Module.register("MMM-Todoist", {
 			if (!item.all_day) {
 				var hours = dueDateTime.getHours();
 				var minutes = dueDateTime.getMinutes().toString().padStart(2, "0");
-				if (config.timeFormat == 12) {
+				if (config.timeFormat === 12) {
 					var ampm = hours >= 12 ? "PM" : "AM";
 					hours = hours % 12 || 12;
 					dueDateDisplay += " " + hours + ":" + minutes + " " + ampm;
