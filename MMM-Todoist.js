@@ -956,6 +956,11 @@ Module.register("MMM-Todoist", {
 			clearTimeout(this.completionTimeout);
 			this.completionTimeout = null;
 		}
+		// Clear any pending error reset timeout
+		if (this.errorResetTimeout) {
+			clearTimeout(this.errorResetTimeout);
+			this.errorResetTimeout = null;
+		}
 		this.currentTaskId = null;
 		this.currentTaskItem = null;
 	},
@@ -1001,14 +1006,20 @@ Module.register("MMM-Todoist", {
 			completeBtn.textContent = this.translate("COMPLETION_FAILED");
 			completeBtn.classList.add("todoist-modal-btn-error");
 
+			// Clear any existing error reset timeout
+			if (this.errorResetTimeout) {
+				clearTimeout(this.errorResetTimeout);
+			}
+
 			// Reset to normal state after 3 seconds
 			var self = this;
-			setTimeout(function() {
+			this.errorResetTimeout = setTimeout(function() {
 				if (completeBtn) {
 					completeBtn.disabled = false;
 					completeBtn.textContent = self.translate("MARK_COMPLETE");
 					completeBtn.classList.remove("todoist-modal-btn-error");
 				}
+				self.errorResetTimeout = null;
 			}, 3000);
 		}
 	},
