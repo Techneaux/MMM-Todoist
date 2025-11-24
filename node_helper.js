@@ -157,7 +157,7 @@ module.exports = NodeHelper.create({
 				var taskJson = JSON.parse(body);
 				itemid = taskJson["temp_id_mapping"][JSON.stringify(tmpid)];
 				// Send ADDITEM only after API confirms subtask was created
-				self.sendSocketNotification("ADDITEM", { taskId: itemid });
+				self.sendSocketNotification("ADDITEM", itemid);
 			}
 		});
 	},
@@ -220,7 +220,7 @@ module.exports = NodeHelper.create({
 					callback(self, proj, self.addData.message, itemid, section);
 				} else {
 					// Send ADDITEM only after API confirms task was created
-					self.sendSocketNotification("ADDITEM", { taskId: itemid });
+					self.sendSocketNotification("ADDITEM", itemid);
 				}
 			}
 		});
