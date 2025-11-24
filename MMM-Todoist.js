@@ -261,15 +261,7 @@ Module.register("MMM-Todoist", {
 				return;
 			}
 
-			this.filterTodoistData(payload);
-
-			if (this.config.displayLastUpdate) {
-				this.lastUpdate = Date.now() / 1000; //save the timestamp of the last update to be able to display it
-				Log.log("ToDoIst update OK, project : " + this.config.projects + " at : " + moment.unix(this.lastUpdate).format(this.config.displayLastUpdateFormat)); //AgP
-			}
-
-			this.loaded = true;
-			this.updateDom(1000);
+			this.applyTasksData(payload);
 		} else if (notification === "ADDITEM") {
 			// Immediately fetch fresh data to show the newly created task
 			this.sendSocketNotification("FETCH_TODOIST", this.config);
@@ -289,6 +281,22 @@ Module.register("MMM-Todoist", {
 				completeBtn.textContent = this.translate("MARK_COMPLETE");
 			}
 		}
+	},
+
+	/**
+	 * Applies new tasks data to the module, updating state and DOM.
+	 * @param {Object} tasksData - The tasks data from the API
+	 */
+	applyTasksData: function (tasksData) {
+		this.filterTodoistData(tasksData);
+
+		if (this.config.displayLastUpdate) {
+			this.lastUpdate = Date.now() / 1000; //save the timestamp of the last update to be able to display it
+			Log.log("ToDoIst update OK, project : " + this.config.projects + " at : " + moment.unix(this.lastUpdate).format(this.config.displayLastUpdateFormat)); //AgP
+		}
+
+		this.loaded = true;
+		this.updateDom(1000);
 	},
 
 	filterTodoistData: function (tasks) {
@@ -970,18 +978,11 @@ Module.register("MMM-Todoist", {
 		this.isModalOpen = false;
 
 		// Apply any pending updates that were deferred while modal was open
-		if (this.hasPendingUpdate && this.pendingTasksData) {
+		if (this.hasPendingUpdate) {
 			if (this.config.debug) {
 				Log.log("MMM-Todoist: Modal closed, applying pending update");
 			}
-			this.filterTodoistData(this.pendingTasksData);
-
-			if (this.config.displayLastUpdate) {
-				this.lastUpdate = Date.now() / 1000;
-			}
-
-			this.loaded = true;
-			this.updateDom(1000);
+			this.applyTasksData(this.pendingTasksData);
 
 			// Clear pending data
 			this.pendingTasksData = null;
