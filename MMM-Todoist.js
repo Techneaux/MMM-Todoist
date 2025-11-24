@@ -343,7 +343,7 @@ Module.register("MMM-Todoist", {
 					}
 					if (hasMatchingLabel) break;
 				}
-				passesFilters = passesFilters && hasMatchingLabel;
+				passesFilters = hasMatchingLabel;
 			}
 		}
 
@@ -710,7 +710,7 @@ Module.register("MMM-Todoist", {
 			}
 
 			// If using input tasks, create a button for new inbox items
-			if (this.config.inputTasks.length > 0 && this.config.showInboxButton) {
+			if (this.config.showInboxButton) {
 				var addNewBtn = document.createElement("div");
 				addNewBtn.className = "add-list-item-add fas fa-square-plus";
 				addNewBtn.id = "inbox-NEW";

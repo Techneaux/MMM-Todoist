@@ -274,6 +274,11 @@ function testFiltering(data) {
 				return config.displayTasksWithoutDue;
 			}
 
+			// If displayTasksWithinDays is -1, show all tasks with due dates
+			if (config.displayTasksWithinDays === -1) {
+				return true;
+			}
+
 			const oneDay = 24 * 60 * 60 * 1000;
 			const dueDateTime = parseDueDate(item.due.date);
 			const dueDate = new Date(dueDateTime.getFullYear(), dueDateTime.getMonth(), dueDateTime.getDate());
