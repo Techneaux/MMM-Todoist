@@ -484,22 +484,22 @@ Module.register("MMM-Todoist", {
 		//***** Sorting code if you want to add new methods. */
 		switch (self.config.sortType) {
 		case "todoist":
-			sorteditems = self.sortByTodoist(items);
+			self.sortByTodoist(items);
 			break;
 		case 'priority':
-			sorteditems = self.sortByPriority(items);
+			self.sortByPriority(items);
 			break;
 		case "dueDateAsc":
-			sorteditems = self.sortByDueDateAsc(items);
+			self.sortByDueDateAsc(items);
 			break;
 		case "dueDateDesc":
-			sorteditems = self.sortByDueDateDesc(items);
+			self.sortByDueDateDesc(items);
 			break;
 		case "dueDateDescPriority":
-			sorteditems = self.sortByDueDateDescPriority(items);
+			self.sortByDueDateDescPriority(items);
 			break;
 		default:
-			sorteditems = self.sortByTodoist(items);
+			self.sortByTodoist(items);
 			break;
 		}
 
@@ -584,6 +584,8 @@ Module.register("MMM-Todoist", {
 
 			if (a.priority < b.priority) return 1;
 			if (a.priority > b.priority) return -1;
+
+			return 0;
 		});
 		return itemstoSort;
     	},
