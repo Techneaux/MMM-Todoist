@@ -252,8 +252,8 @@ Module.register("MMM-Todoist", {
 			this.loaded = true;
 			this.updateDom(1000);
 		} else if (notification === "ADDITEM") {
-			this.loaded = true;
-			this.updateDom(1000);
+			// Immediately fetch fresh data to show the newly created task
+			this.sendSocketNotification("FETCH_TODOIST", this.config);
 		} else if (notification === "FETCH_ERROR") {
 			Log.error("Todoist Error. Could not fetch todos: " + payload.error);
 		}
@@ -672,7 +672,7 @@ Module.register("MMM-Todoist", {
 				"month": "short"
 			}) + " " + dueDate.getDate();
 			className += "xsmall";
-		} else if (item.due.date === "2100-12-31") {
+		} else if (item.due.date === "1900-01-01") {
 			innerHTML = "";
 			className += "xsmall";
 		} else {
