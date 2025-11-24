@@ -964,10 +964,10 @@ Module.register("MMM-Todoist", {
 	 * Clears the selected-task class from the currently selected row
 	 */
 	clearSelectedRow: function() {
-		if (this.selectedRowElement) {
+		if (this.selectedRowElement && document.body.contains(this.selectedRowElement)) {
 			this.selectedRowElement.classList.remove("selected-task");
-			this.selectedRowElement = null;
 		}
+		this.selectedRowElement = null;
 	},
 
 	/**
