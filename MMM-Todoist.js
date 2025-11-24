@@ -466,7 +466,7 @@ Module.register("MMM-Todoist", {
 		items.forEach(function (item) {
 			if (item.due === null) {
 				item.due = {};
-				item.due["date"] = "2100-12-31";
+				item.due["date"] = "1900-01-01";
 				item.all_day = true;
 			}
 			// Used to sort by date.
