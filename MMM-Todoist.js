@@ -304,6 +304,16 @@ Module.register("MMM-Todoist", {
 			}
 		}
 		*/
+
+		// Normalize config IDs to strings to match Todoist API response format
+		// This ensures compatibility whether users provide numbers or strings in config
+		if (self.config.projects && self.config.projects.length > 0) {
+			self.config.projects = self.config.projects.map(id => String(id));
+		}
+		if (self.config.sections && self.config.sections.length > 0) {
+			self.config.sections = self.config.sections.map(id => String(id));
+		}
+
 		if (self.config.displayTasksWithinDays > -1 || !self.config.displayTasksWithoutDue) {
 			tasks.items = tasks.items.filter(function (item) {
 				if (item.due === null) {
