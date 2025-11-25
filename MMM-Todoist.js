@@ -1136,8 +1136,8 @@ Module.register("MMM-Todoist", {
 				var addListBtn = document.createElement("div");
 				
 				// Determine if we should show symbol (default true for backward compatibility)
-				var showSymbol = item["showSymbol"] !== false;
-				var hasText = item["text"] && item["text"].trim() !== "";
+				let showSymbol = item["showSymbol"] !== false;
+				const hasText = item["text"] && item["text"].trim() !== "";
 				
 				// Must have at least text or symbol
 				if (!hasText && !showSymbol) {
@@ -1145,9 +1145,9 @@ Module.register("MMM-Todoist", {
 				}
 				
 				// Build button class
-				var btnClass = "add-list-item-add";
+				let btnClass = "add-list-item-add";
 				if (showSymbol) {
-					var symbol = item["symbol"] || "plus";
+					const symbol = item["symbol"] || "plus";
 					btnClass += " fas fa-" + symbol;
 				}
 				if (hasText) {
@@ -1157,7 +1157,7 @@ Module.register("MMM-Todoist", {
 				
 				// Add text content if specified
 				if (hasText) {
-					var textSpan = document.createElement("span");
+					const textSpan = document.createElement("span");
 					textSpan.className = "add-list-btn-text";
 					textSpan.textContent = item["text"];
 					addListBtn.appendChild(textSpan);
@@ -1176,7 +1176,7 @@ Module.register("MMM-Todoist", {
 				}
 				addListBtn.addEventListener("click", event => {
 					// Use currentTarget to ensure we get the button, not the text span
-					var btnId = event.currentTarget.id;
+					const btnId = event.currentTarget.id;
 					this.sendNotification("KEYBOARD", {
 						key: "MMM-Todoist",
 						style: "default",
