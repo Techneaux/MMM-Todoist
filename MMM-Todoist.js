@@ -196,7 +196,7 @@ Module.register("MMM-Todoist", {
 				}, this.config.updateInterval);
 			}
 
-		} else { //if (userPresence = false OR ModuleHidden = true)
+		} else { //if (this.userPresence = false OR ModuleHidden = true)
 			Log.log("Personne regarde : on stop l'update " + this.name + " projet : " + this.config.projects);
 			clearInterval(this.updateIntervalID); // stop the update interval of this module
 			this.updateIntervalID = 0; //reset the flag to be able to start another one at resume
