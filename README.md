@@ -355,7 +355,7 @@ The following properties can be configured for each inputTask:
 		</tr>
 		<tr>
 			<td><code>text</code></td>
-			<td>(optional) Text label to display on the button. Appears to the left of the icon if both are shown.<br>
+			<td>(optional) Text label to display on the button. Appears to the right of the icon if both are shown.<br>
 				<br><b>Possible values:</b> <code>string</code>
 				<br><b>Default value:</b> <code>none</code>
 				<br><b>Example:</b> <code>"Add Task"</code>
