@@ -279,7 +279,7 @@ Module.register("MMM-Todoist", {
 			// 1. Provide instant visual feedback
 			// 2. Remove the element with :active state before DOM rebuild
 			if (this.currentTaskId) {
-				var completedRow = document.querySelector('[data-task-id="' + this.currentTaskId + '"]');
+				var completedRow = document.querySelector('[data-task-id="' + CSS.escape(this.currentTaskId) + '"]');
 				if (completedRow) {
 					completedRow.style.display = 'none';
 				}
