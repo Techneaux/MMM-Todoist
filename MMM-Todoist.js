@@ -1197,7 +1197,7 @@ Module.register("MMM-Todoist", {
 					this.sendNotification("KEYBOARD", {
 						key: "MMM-Todoist",
 						style: "default",
-						data: {"id" : event.target.id }
+						data: {"id" : event.currentTarget.id }
 					});
 				});
 				addList.appendChild(addNewBtn);
