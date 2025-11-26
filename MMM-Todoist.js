@@ -1016,9 +1016,9 @@ Module.register("MMM-Todoist", {
 		// Mark modal as closed
 		this.isModalOpen = false;
 
-		// Discard any cached pending data (it may be stale)
-		// and fetch fresh data to ensure we display up-to-date tasks
-		// Skip if we're about to fetch fresh data anyway (e.g., after task completion)
+		// If data was cached while the modal was open, discard it (it may be stale)
+		// and fetch fresh data to ensure we display up-to-date tasks.
+		// Only fetch fresh data if skipFreshFetch is false (i.e., caller is not already fetching)
 		if (this.hasPendingUpdate && !skipFreshFetch) {
 			if (this.config.debug) {
 				Log.log("MMM-Todoist: Modal closed, discarding stale cached data and fetching fresh data");
