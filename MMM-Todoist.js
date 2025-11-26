@@ -285,7 +285,7 @@ Module.register("MMM-Todoist", {
 				this.completionTimeout = null;
 			}
 
-			this.closeTaskModal(true);  // Skip pending update since we're fetching fresh data
+			this.closeTaskModal(true);  // Skip fresh fetch since we're fetching fresh data below
 			// Immediately refresh the task list
 			this.sendSocketNotification("FETCH_TODOIST", this.config);
 		} else if (notification === "COMPLETE_ERROR") {
@@ -993,9 +993,9 @@ Module.register("MMM-Todoist", {
 
 	/**
 	 * Closes the task modal
-	 * @param {boolean} skipPendingUpdate - If true, skip applying pending data (used when fresh data is about to be fetched)
+	 * @param {boolean} skipFreshFetch - If true, skip fetching fresh data (used when fresh data is about to be fetched anyway, e.g., after task completion)
 	 */
-	closeTaskModal: function(skipPendingUpdate) {
+	closeTaskModal: function(skipFreshFetch) {
 		var modal = this.modalElement;
 		if (modal) {
 			modal.classList.add("hidden");
@@ -1016,17 +1016,18 @@ Module.register("MMM-Todoist", {
 		// Mark modal as closed
 		this.isModalOpen = false;
 
-		// Apply any pending updates that were deferred while modal was open
+		// Discard any cached pending data (it may be stale)
+		// and fetch fresh data to ensure we display up-to-date tasks
 		// Skip if we're about to fetch fresh data anyway (e.g., after task completion)
-		if (this.hasPendingUpdate && !skipPendingUpdate) {
+		if (this.hasPendingUpdate && !skipFreshFetch) {
 			if (this.config.debug) {
-				Log.log("MMM-Todoist: Modal closed, applying pending update");
+				Log.log("MMM-Todoist: Modal closed, discarding stale cached data and fetching fresh data");
 			}
-			this.applyTasksData(this.pendingTasksData);
-
-			// Clear pending data
+			// Discard potentially stale cached data
 			this.pendingTasksData = null;
 			this.hasPendingUpdate = false;
+			// Fetch fresh data from the API to ensure current data is displayed
+			this.sendSocketNotification("FETCH_TODOIST", this.config);
 		}
 	},
 
