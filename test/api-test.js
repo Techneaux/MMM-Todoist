@@ -163,6 +163,49 @@ function fetchTodoistData() {
 	});
 }
 
+// Display raw API response structure for debugging API version changes
+function displayRawStructure(data) {
+	logSection('Raw API Response Structure');
+
+	// Top-level keys
+	const keys = Object.keys(data);
+	log(`  Top-level keys: ${colors.bright}${keys.join(', ')}${colors.reset}`);
+	keys.forEach(key => {
+		const val = data[key];
+		if (Array.isArray(val)) {
+			log(`    ${key}: Array[${val.length}]`);
+		} else if (val && typeof val === 'object') {
+			log(`    ${key}: Object { ${Object.keys(val).join(', ')} }`);
+		} else {
+			log(`    ${key}: ${typeof val} = ${JSON.stringify(val)}`);
+		}
+	});
+
+	// Sample item
+	if (data.items && data.items.length > 0) {
+		log(`\n  ${colors.bright}Sample item (first task):${colors.reset}`);
+		log(JSON.stringify(data.items[0], null, 4));
+	} else {
+		logWarning('No "items" array in response — tasks may use a different key');
+	}
+
+	// Sample project
+	if (data.projects && data.projects.length > 0) {
+		log(`\n  ${colors.bright}Sample project:${colors.reset}`);
+		log(JSON.stringify(data.projects[0], null, 4));
+	} else {
+		logWarning('No "projects" array in response');
+	}
+
+	// Sample section
+	if (data.sections && data.sections.length > 0) {
+		log(`\n  ${colors.bright}Sample section:${colors.reset}`);
+		log(JSON.stringify(data.sections[0], null, 4));
+	} else {
+		logWarning('No "sections" array in response');
+	}
+}
+
 // Display statistics
 function displayStatistics(data) {
 	logSection('Data Statistics');
@@ -449,6 +492,9 @@ async function runTests() {
 
 		// Step 2: Fetch data
 		const data = await fetchTodoistData();
+
+		// Step 2.5: Show raw response structure (for debugging API changes)
+		displayRawStructure(data);
 
 		// Step 3: Display statistics
 		displayStatistics(data);
